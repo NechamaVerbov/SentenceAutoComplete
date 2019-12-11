@@ -11,128 +11,35 @@
 #include "/home/nechamaverbov/Desktop/SentenceAutoComplete/Model/auto_complete_data.h"
 
 // Ranking all subtracting points for score
-const int POINTS[] = {10, 8, 6, 4, 2, 2, 2, 2, 2, 2};
+const int ADD_REMOVE_MARK[] = {10, 8, 6, 4, 2, 2, 2, 2, 2, 2};
+const int EXCHANGE_MARK[] = {5, 4, 3, 2, 1, 1, 1, 1, 1, 1};
 
 class SearchCompletionController {
 public:
     void run();
 
     static const int K = 5;
+
 private:
     CompletionView view;
 };
 
+
+// Global functions used in  Controller
 vector<string> GetBestKCompletions(const string& prefix);
 vector<string> checkForMistakes(const string& prefix);
 vector<string> checkWithoutMistakes(const string& prefix);
-vector<string> checkExtraCharacter(const string& prefix);
-vector<string> parseToAutoCompleteDataStrings(const vector<pair<string, size_t>>&, size_t,int idx=0);
+void createScoreVector(string sub_str, int score, int j, vector<AutoCompleteData>& options);
+vector<AutoCompleteData> checkRemoveCharacter(const string& prefix);
+vector<AutoCompleteData> checkExchangeCharacter(const string& prefix);
+vector<AutoCompleteData> checkAddCharacter(const string& prefix);
+vector<string> getHighestScoreVec(const vector<AutoCompleteData>&, const vector<AutoCompleteData>&, const vector<AutoCompleteData>&);
+string removeExtraSpace(const string & prefix);
+string highestScore(const AutoCompleteData& v1, const AutoCompleteData& v2, const AutoCompleteData& v3);
+string highestScore(const AutoCompleteData& v1, const AutoCompleteData& v2);
 size_t isScoreBigger(const vector<AutoCompleteData>&, int);
+vector<string> parseToAutoCompleteDataStrings(const vector<pair<string, size_t>>&, size_t,int idx=0);
 
 
-inline void SearchCompletionController::run()
-{
-    string prefix;
-    vector<string> completions;
-
-    while(1)
-    {
-        cout << "Enter search: " << endl;
-        cin >> prefix;
-
-        completions = GetBestKCompletions(prefix);
-        view.printCompletions(completions);
-
-        exit(1);
-    }
-}
-
-inline vector<string> parseToAutoCompleteDataStrings(const vector<pair<string, size_t>>& values, size_t len, int idx)
-{
-    vector<string> c_sentences;
-    string sentence;
-    int score;
-
-    for (Pair file_offset : values)
-    {
-        sentence = SentenceData::sentences_map[file_offset.first][file_offset.second];
-        c_sentences.emplace_back(AutoCompleteData(sentence, file_offset.first, file_offset.second, score).toString());
-    }
-
-    return c_sentences;
-}
-
-inline vector<string> GetBestKCompletions(const string& prefix)
-{
-    if (!(SentenceData::completions_map[prefix]).empty())
-    {
-        return checkWithoutMistakes(prefix);
-    }
-    else
-        return checkForMistakes(prefix);
-}
-
-inline vector<string> checkWithoutMistakes(const string& prefix)
-{
-    const vector<pair<string, size_t>> values = SentenceData::completions_map[prefix];
-
-    vector<string> c_sentences;
-    string sentence;
-
-    for (Pair file_offset : values)
-    {
-        sentence = SentenceData::sentences_map[file_offset.first][file_offset.second];
-        c_sentences.emplace_back(AutoCompleteData(sentence, file_offset.first, file_offset.second, prefix.length() * 2).toString());
-    }
-
-    return c_sentences;
-}
-
-inline vector<string> checkForMistakes(const string& prefix)
-{
-    // add adding and change
-    return checkExtraCharacter(prefix);
-}
-
-inline size_t isScoreBigger(const vector<AutoCompleteData>& values, int score)
-{
-    // If there's a score smaller then the given score the function returns the index,
-    // otherwise returns -1.
-    for(int i = 0; i < values.size(); ++i)
-    {
-        if (values[i].getScore() < score)
-            return i;
-    }
-    return -1;
-}
-
-vector<string> checkExtraCharacter(const string& prefix)
-{
-    vector<string> options;
-    string sentence, sub_str;
-
-    for(int i = prefix.length() - 1, j = 0; i >= 0; --i, j = 0)
-    {
-        sub_str = prefix.substr(0, i) + prefix.substr(i + 1, prefix.length() - i - 1);
-
-        const vector<pair<string, size_t>> values = SentenceData::completions_map[sub_str];
-
-        if(!values.empty())
-        {
-            int score = (prefix.length() * 2) - POINTS[i];
-
-            while (options.size() < SearchCompletionController::K && j < values.size()) //first fill
-            {
-                sentence = SentenceData::sentences_map[values[j].first][values[j].second];
-                options.emplace_back(AutoCompleteData(sentence, values[j].first, values[j].second, score).toString());
-                ++j;
-            }
-        }
-        if(options.size() == SearchCompletionController::K)
-            break;
-
-    }
-    return options;
-}
 
 #endif //SENTENCEAUTOCOMPLETE_SEARCH_COMPLETION_CONTROLLER_H
