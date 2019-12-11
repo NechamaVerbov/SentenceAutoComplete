@@ -1,9 +1,9 @@
-#include "search.h"
+#include "/home/nechamaverbov/Desktop/SentenceAutoComplete/Controller/search_completion_controller.h"
 
 
 int main()
 {
-    Search search;
+    SearchCompletionController search;
     search.run();
 
     return 0;
