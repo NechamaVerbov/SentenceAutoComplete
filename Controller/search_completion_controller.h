@@ -8,11 +8,13 @@
 #include "/home/nechamaverbov/Desktop/SentenceAutoComplete/json.hpp"
 #include "/home/nechamaverbov/Desktop/SentenceAutoComplete/Model/sentence_data.h"
 #include "/home/nechamaverbov/Desktop/SentenceAutoComplete/View/completion_view.h"
+#include "/home/nechamaverbov/Desktop/SentenceAutoComplete/Model/auto_complete_data.h"
+
 
 class SearchCompletionController {
 public:
     void run();
-    vector<pair<string, size_t>> GetBestKCompletions(const string& prefix);
+    vector<string> GetBestKCompletions(const string& prefix);
 
 private:
     SentenceData data;
@@ -24,7 +26,7 @@ inline void SearchCompletionController::run()
 {
     string prefix;
     //vector<AutoCompleteData> completions;
-    vector<pair<string, size_t>> completions;
+    vector<string> completions;
 
     while(1)
     {
@@ -39,9 +41,19 @@ inline void SearchCompletionController::run()
     }
 }
 
-inline vector<pair<string, size_t>> SearchCompletionController::GetBestKCompletions(const string& prefix)
+inline vector<string> SearchCompletionController::GetBestKCompletions(const string& prefix)
 {
-    return SentenceData::completions_map[prefix];
+    vector<pair<string, size_t>> values = SentenceData::completions_map[prefix];
+    vector<string> c_sentences;
+    string sentence;
+
+    for(Pair file_offset : values)
+    {
+        sentence = SentenceData::sentences_map[file_offset.first][file_offset.second];
+        c_sentences.push_back(AutoCompleteData(sentence, file_offset.first, file_offset.second, 0).toString());
+    }
+
+    return c_sentences;
 }
 
 #endif //SENTENCEAUTOCOMPLETE_SEARCH_COMPLETION_CONTROLLER_H

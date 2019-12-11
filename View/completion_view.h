@@ -14,14 +14,14 @@ typedef pair<string, size_t> Pair;
 
 class CompletionView {
 public:
-    void printCompletions(const vector<Pair>&);
+    void printCompletions(const vector<string>&);
 };
 
-inline void CompletionView::printCompletions(const vector<Pair>& v)
+inline void CompletionView::printCompletions(const vector<string>& v)
 {
-    for(Pair n : v)
+    for(string n : v)
     {
-        std::cout << n.first << " " << n.second << '\n';
+        std::cout << n << '\n';
     }
 }
 #endif //SENTENCEAUTOCOMPLETE_COMPLETION_VIEW_H

@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <fstream>
 #include <iostream>
+#include <set>
 #include "/home/nechamaverbov/Desktop/SentenceAutoComplete/json.hpp"
 using std::unordered_map;
 using std::string;
@@ -30,13 +31,16 @@ public:
     static string name_data_json;
     static vector<string> name_data_file;
     static CompletionMap completions_map;
-    static unordered_map<string, vector<string> > sentences_map;
+    static SentencesMap sentences_map;
 private:
 
 };
 
-string SentenceData::name_data_json = "/home/nechamaverbov/Desktop/SentenceAutoComplete/Model/test.json";
-vector<string> SentenceData::name_data_file = {"/home/nechamaverbov/Desktop/SentenceAutoComplete/Model/a.txt"};
+vector<string> split_path(const std::string& str, const std::set<char> delimiters); //global
+
+
+string SentenceData::name_data_json = "/home/nechamaverbov/Desktop/SentenceAutoComplete/test.json";
+vector<string> SentenceData::name_data_file = {"/home/nechamaverbov/Desktop/SentenceAutoComplete/a.txt"};
 
 CompletionMap SentenceData::completions_map = initCompletionMap();
 unordered_map<string, vector<string> > SentenceData::sentences_map = initSentenceMap();
@@ -77,12 +81,39 @@ unordered_map<string, vector<string> > SentenceData::initSentenceMap()
         string line;
         while (getline(file, line))
         {
-            s_map[x].push_back(line); // input them into the map
-            std::cout << x << " " << line << std::endl;
+            std::set<char> delimiter = {'/'};
+            s_map[*(split_path(x, delimiter).end()-1)].push_back(line); // input them into the map
         }
     }
 
     return s_map;
+}
+
+vector<string> split_path(const std::string& str, const std::set<char> delimiters)
+{
+    std::vector<std::string> result;
+
+    char const* pch = str.c_str();
+    char const* start = pch;
+    for(; *pch; ++pch)
+    {
+        if (delimiters.find(*pch) != delimiters.end())
+        {
+            if (start != pch)
+            {
+                std::string str(start, pch);
+                result.push_back(str);
+            }
+            else
+            {
+                result.push_back("");
+            }
+            start = pch + 1;
+        }
+    }
+    result.push_back(start);
+
+    return result;
 }
 
 #endif //SENTENCEAUTOCOMPLETE_SENTENCE_DATA_H
