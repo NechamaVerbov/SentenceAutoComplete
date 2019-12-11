@@ -16,6 +16,7 @@ public:
 
     string toString() const;
 
+    int getScore() const;
     friend std::ostream& operator<<(std::ostream&, AutoCompleteData&);
 
 private:
@@ -31,6 +32,11 @@ inline AutoCompleteData::AutoCompleteData(string sentence, string source, int _o
     source_text = source;
     offset = _offset;
     score = _score;
+}
+
+inline int AutoCompleteData::getScore() const
+{
+    return score;
 }
 
 inline string AutoCompleteData::toString() const

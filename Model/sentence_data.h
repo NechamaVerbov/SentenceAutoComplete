@@ -12,12 +12,8 @@
 #include <iostream>
 #include <set>
 #include "/home/nechamaverbov/Desktop/SentenceAutoComplete/json.hpp"
-using std::unordered_map;
-using std::string;
-using std::vector;
-using std::pair;
-using std::ifstream;
-using nlohmann::json;
+
+using std::unordered_map, std::string, std::vector, std::pair, std::ifstream, nlohmann::json;
 
 typedef unordered_map<string, vector<pair<string, size_t>> > CompletionMap;
 typedef unordered_map<string, vector<string> > SentencesMap;
@@ -36,19 +32,19 @@ private:
 
 };
 
-vector<string> split_path(const std::string& str, const std::set<char> delimiters); //global
+vector<string> split_path(const std::string& str, std::set<char> delimiters); //global
 
 
-string SentenceData::name_data_json = "/home/nechamaverbov/Desktop/SentenceAutoComplete/test.json";
+string SentenceData::name_data_json = "/home/nechamaverbov/Desktop/SentenceAutoComplete/test_a.json";
 vector<string> SentenceData::name_data_file = {"/home/nechamaverbov/Desktop/SentenceAutoComplete/a.txt"};
 
 CompletionMap SentenceData::completions_map = initCompletionMap();
 unordered_map<string, vector<string> > SentenceData::sentences_map = initSentenceMap();
 
 
-CompletionMap SentenceData::initCompletionMap()
+inline CompletionMap SentenceData::initCompletionMap()
 {
-    std::ifstream file(name_data_json);
+    ifstream file(name_data_json);
     if (file.is_open())
     {
         json json_data = json::parse(file);
@@ -71,9 +67,10 @@ CompletionMap SentenceData::initCompletionMap()
 }
 
 
-unordered_map<string, vector<string> > SentenceData::initSentenceMap()
+inline unordered_map<string, vector<string> > SentenceData::initSentenceMap()
 {
     SentencesMap s_map;
+
     for(auto&& x: name_data_file)
     {
         ifstream file;
@@ -89,7 +86,7 @@ unordered_map<string, vector<string> > SentenceData::initSentenceMap()
     return s_map;
 }
 
-vector<string> split_path(const std::string& str, const std::set<char> delimiters)
+inline vector<string> split_path(const std::string& str, const std::set<char> delimiters)
 {
     std::vector<std::string> result;
 
@@ -101,17 +98,17 @@ vector<string> split_path(const std::string& str, const std::set<char> delimiter
         {
             if (start != pch)
             {
-                std::string str(start, pch);
-                result.push_back(str);
+                std::string s(start, pch);
+                result.push_back(s);
             }
             else
             {
-                result.push_back("");
+                result.emplace_back("");
             }
             start = pch + 1;
         }
     }
-    result.push_back(start);
+    result.emplace_back(start);
 
     return result;
 }

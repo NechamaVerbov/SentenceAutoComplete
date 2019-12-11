@@ -31,7 +31,7 @@ def insert_idx(sentence_lst: list, sentence: str) -> int:
 
 
 def add_to_dict(key: str, sentence: str, file: str, offset: int):
-    """Adds to map_data the item. If exists already and under AMOUNT_SENTENCES, "file + offset" will be added
+    """Adds to map_data the item. If exists already and under AMOUNT_SENTENCES, [file, offset] will be added
        to the existing key in lexical order, otherwise won't do anything"""
     if key in map_data.keys():
         if len(map_data[key]) < AMOUNT_SENTENCES:
@@ -48,7 +48,7 @@ def read_file_data(file: str):
 
 def write_parsed_data_to_json():
     """Stores parsed data in Json file"""
-    with open('data.json', 'w', encoding='utf-8') as f:
+    with open('test.json', 'w', encoding='utf-8') as f:
         json.dump(map_data, f, ensure_ascii=False, indent=4)
 
 
