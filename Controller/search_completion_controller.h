@@ -25,7 +25,7 @@ private:
 };
 
 
-// Global functions used in  Controller
+// Global functions used in Controller
 vector<string> GetBestKCompletions(const string& prefix);
 vector<string> checkForMistakes(const string& prefix);
 vector<string> checkWithoutMistakes(const string& prefix);
@@ -35,10 +35,6 @@ vector<AutoCompleteData> checkExchangeCharacter(const string& prefix);
 vector<AutoCompleteData> checkAddCharacter(const string& prefix);
 vector<string> getHighestScoreVec(const vector<AutoCompleteData>&, const vector<AutoCompleteData>&, const vector<AutoCompleteData>&);
 string removeExtraSpace(const string & prefix);
-string highestScore(const AutoCompleteData& v1, const AutoCompleteData& v2, const AutoCompleteData& v3);
-string highestScore(const AutoCompleteData& v1, const AutoCompleteData& v2);
-size_t isScoreBigger(const vector<AutoCompleteData>&, int);
-vector<string> parseToAutoCompleteDataStrings(const vector<pair<string, size_t>>&, size_t,int idx=0);
 
 
 

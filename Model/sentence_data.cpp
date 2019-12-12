@@ -4,8 +4,8 @@
 
 #include "sentence_data.h"
 
-string SentenceData::name_data_json = "/home/nechamaverbov/Desktop/SentenceAutoComplete/test.json";
-vector<string> SentenceData::name_data_file = {"/home/nechamaverbov/Desktop/SentenceAutoComplete/William_Shakespeare__Hamlet.txt"};
+string SentenceData::name_data_json = "/home/nechamaverbov/Desktop/SentenceAutoComplete/test_a.json";
+vector<string> SentenceData::name_data_file = {"/home/nechamaverbov/Desktop/SentenceAutoComplete/a.txt"};
 
 CompletionMap SentenceData::completions_map = initCompletionMap();
 unordered_map<string, vector<string> > SentenceData::sentences_map = initSentenceMap();
